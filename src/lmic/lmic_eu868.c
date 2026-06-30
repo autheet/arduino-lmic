@@ -75,7 +75,10 @@ static CONST_TABLE(s1_t, TXPOWLEVELS)[] = {
 int8_t LMICeu868_pow2dBm(uint8_t mcmd_ladr_p1) {
         uint8_t const pindex = (mcmd_ladr_p1&MCMD_LinkADRReq_POW_MASK)>>MCMD_LinkADRReq_POW_SHIFT;
         if (pindex < LENOF_TABLE(TXPOWLEVELS)) {
-                return TABLE_GET_S1(TXPOWLEVELS, pindex);
+#ifndef LMIC_CABLE_LOSS_DB
+#define LMIC_CABLE_LOSS_DB 0
+#endif
+                return TABLE_GET_S1(TXPOWLEVELS, pindex) + LMIC_CABLE_LOSS_DB;
         } else {
                 return -128;
         }

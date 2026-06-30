@@ -122,9 +122,13 @@ void LMICeu868_initDefaultChannels(bit_t join) {
                 LMIC.channelDrMap[fu] = DR_RANGE_MAP(EU868_DR_SF12, EU868_DR_SF7);
         }
 
-        (void) LMIC_setupBand(BAND_MILLI, 14 /* dBm */, 1000 /* 0.1% */);
-        (void) LMIC_setupBand(BAND_CENTI, 14 /* dBm */,  100 /* 1% */);
-        (void) LMIC_setupBand(BAND_DECI,  27 /* dBm */,   10 /* 10% */);
+#ifndef LMIC_CABLE_LOSS_DB
+#define LMIC_CABLE_LOSS_DB 0
+#endif
+
+        (void) LMIC_setupBand(BAND_MILLI, 14 + LMIC_CABLE_LOSS_DB /* dBm */, 1000 /* 0.1% */);
+        (void) LMIC_setupBand(BAND_CENTI, 14 + LMIC_CABLE_LOSS_DB /* dBm */,  100 /* 1% */);
+        (void) LMIC_setupBand(BAND_DECI,  27 + LMIC_CABLE_LOSS_DB /* dBm */,   10 /* 10% */);
 }
 
 bit_t LMIC_setupBand(u1_t bandidx, s1_t txpow, u2_t txcap) {

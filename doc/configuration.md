@@ -258,3 +258,19 @@ The compliance test script includes a suitable logging implementation; the other
 ### Special purpose
 
 `#define DISABLE_INVERT_IQ_ON_RX` disables the inverted Q-I polarity on RX. **Use of this variable is deprecated, see issue [#250](https://github.com/mcci-catena/arduino-lmic/issues/250).** Rather than defining this, set the value of `LMIC.noRXIQinversion`. If set non-zero, receive will be non-inverted. End-devices will be able to receive messages from each other, but will not be able to hear the gateway (other than Class B beacons)aa. If set zero, (the default), end devices will only be able to hear gateways, not each other.
+
+### Cable Loss Output Power Offset
+
+If using an external antenna with a long cable, you can offset the calculated Effective Radiated Power (ERP) by defining `LMIC_CABLE_LOSS_DB`. The MAC calculates regional transmission limits dynamically, and adding this variable instructs the stack to transmit slightly stronger from the radio chip in order to combat line attenuation while remaining legally compliant.
+
+In `project_config/lmic_project_config.h`, add:
+
+```c
+#define LMIC_CABLE_LOSS_DB 2
+```
+
+On your compiler command line, add:
+
+```shell
+-D LMIC_CABLE_LOSS_DB=2
+```
